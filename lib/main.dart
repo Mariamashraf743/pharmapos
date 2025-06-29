@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:window_manager/window_manager.dart';
 import 'screens/splash_screen.dart';
 import 'services/database_service.dart';
@@ -11,27 +10,27 @@ void main() async {
   // Initialize window manager for desktop
   await windowManager.ensureInitialized();
 
-  // Set smaller window properties for desktop
+  // Window settings
   WindowOptions windowOptions = const WindowOptions(
-    size: Size(1000, 700), // Smaller initial size
-    minimumSize: Size(900, 600), // Smaller minimum size
-    maximumSize: Size(1400, 1000), // Maximum size limit
+    size: Size(1280, 720), // Default size
+    minimumSize: Size(900, 600), // Optional
     center: true,
     backgroundColor: Colors.transparent,
     skipTaskbar: false,
     titleBarStyle: TitleBarStyle.normal,
     windowButtonVisibility: true,
     title: 'PharmaPOS - Pharmacy Point of Sale System',
-    alwaysOnTop: false,
-    fullScreen: false,
+    fullScreen: false, // ✅ لا تبدأ بوضع ملء الشاشة
   );
 
+  // Wait until the window is ready
   windowManager.waitUntilReadyToShow(windowOptions, () async {
-    await windowManager.show();
-    await windowManager.focus();
+    await windowManager.show();       // ✅ يعرض النافذة بحجمها الطبيعي
+    await windowManager.focus();      // يركز عليها
+    // ❌ لا تجعلها fullscreen إجباريًا
   });
 
-  runApp( PharmaPOSApp());
+  runApp(const PharmaPOSApp());
 }
 
 class PharmaPOSApp extends StatelessWidget {
@@ -40,14 +39,10 @@ class PharmaPOSApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'PharmaPOS - Desktop',
+      debugShowCheckedModeBanner: false,
+      title: 'PharmaPOS',
       theme: AppTheme.lightTheme,
       home: const SplashScreen(),
-      debugShowCheckedModeBanner: false,
-      // Optimized scroll behavior for smaller screens
-      scrollBehavior: const MaterialScrollBehavior().copyWith(
-
-      ),
     );
   }
 }
